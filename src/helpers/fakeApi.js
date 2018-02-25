@@ -1,4 +1,12 @@
+localStorage.setItem('users', JSON.stringify([{
+  'id': '1',
+  'username': 'test',
+  'firstName': 'test',
+  'lastName': 'user',
+  'password': '1234',
+}]));
 // array in local storage for registered users
+
 let users = JSON.parse(localStorage.getItem('users')) || [];
      
 export function configureFakeBackend() {
@@ -17,7 +25,7 @@ export function configureFakeBackend() {
             let filteredUsers = users.filter(user => {
                 return user.username === params.username && user.password === params.password;
             });
-
+            
             if (filteredUsers.length) {
                 // if login details are valid return user details and fake jwt token
                 let user = filteredUsers[0];
