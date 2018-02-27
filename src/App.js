@@ -1,18 +1,25 @@
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes  from 'prop-types';
 
 import { history } from './helpers/history';
 import { alertActions } from './LoginPage/actions/alertActions';
 import { PrivateRoute } from './Shared/components/PrivateRoute';
 import { HomePage } from './HomePage/components/HomePage';
 import { LoginPage } from './LoginPage/components/LoginPage';
+import { NavBar } from './Navigation/NavBar';
+import Content from './content';
 
 class App extends React.Component {
+  static propTypes = {
+    children: PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
 
       const { dispatch } = this.props;
+
       history.listen((location, action) => {
           // clear alert on location change
           dispatch(alertActions.clear());
@@ -21,30 +28,30 @@ class App extends React.Component {
 
   render() {
     const { alert } = this.props;
+    const { children } = this.props;
+    const { loggedIn } = this.props;
+
+    let navHeader = loggedIn ? <NavBar /> : '';
+
     return (
-      <div className="jumbotron">
-        <div className="container">
-          <div className="col-sm-8 col-sm-offset-2">
-            {alert.message &&
-              <div className={`alert ${alert.type}`}>{alert.message}</div>
-            }
-            <Router history={history}>
-              <div>
-                <PrivateRoute exact path="/" component={HomePage} />
-                <Route path="/login" component={LoginPage} />
-              </div>
-            </Router>
-          </div>
-        </div>
+      <div className="jumbotron">      
+        {navHeader}
+        {
+          alert.message &&
+          <div className={`alert ${alert.type}`}>{alert.message}</div>
+        }
+        <Content body={children} />
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-    const { alert } = state;
+    const { alert, authentication } = state;
+    const { loggedIn } = authentication;
     return {
-        alert
+        alert,
+        loggedIn,
     };
 }
 
