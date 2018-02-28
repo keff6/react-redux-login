@@ -1,12 +1,10 @@
 import { authHeader } from '../../helpers/authHeader';
 
+const ROOT_URL = 'http://52.168.106.50/oasis2/auth/auth-jwt/';
+
 export const userService = {
   login,
   logout,
-  getAll,
-  getById,
-  update,
-  delete: _delete
 };
 
 function login(username, password) {
@@ -16,7 +14,7 @@ function login(username, password) {
     body: JSON.stringify({ username, password })
   };
 
-  return fetch('/users/authenticate', requestOptions)
+  return fetch( ROOT_URL, requestOptions)
     .then(response => {
       if (!response.ok) {
         return Promise.reject(response.statusText);
@@ -39,7 +37,7 @@ function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('user');
 }
-
+/*
 function getAll() {
   const requestOptions = {
     method: 'GET',
@@ -47,8 +45,9 @@ function getAll() {
   };
 
   return fetch('/users', requestOptions).then(handleResponse);
-}
+}*/
 
+/*
 function getById(id) {
   const requestOptions = {
     method: 'GET',
@@ -76,7 +75,7 @@ function _delete(id) {
   };
 
   return fetch('/users/' + id, requestOptions).then(handleResponse);
-}
+}*/
 
 function handleResponse(response) {
   if (!response.ok) {

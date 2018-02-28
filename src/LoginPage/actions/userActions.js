@@ -6,8 +6,6 @@ import { history } from '../../helpers/history';
 export const userActions = {
   login,
   logout,
-  getAll,
-  delete: _delete
 };
 
 function login(username, password) {
@@ -36,7 +34,7 @@ function logout() {
   userService.logout();
   return { type: userConstants.LOGOUT };
 }
-
+/*
 function getAll() {
   return dispatch => {
     dispatch(request());
@@ -75,4 +73,4 @@ function _delete(id) {
   function request(id) { return { type: userConstants.DELETE_REQUEST, id } }
   function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
   function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
-}
+}*/
