@@ -1,10 +1,11 @@
 import { authHeader } from '../../helpers/authHeader';
 
-const ROOT_URL = 'http://52.168.106.50/oasis2/auth/auth-jwt/';
+const ROOT_URL = 'http://localhost:3000/users/authenticate';
 
 export const userService = {
   login,
   logout,
+  getAll,
 };
 
 function login(username, password) {
@@ -37,7 +38,7 @@ function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('user');
 }
-/*
+
 function getAll() {
   const requestOptions = {
     method: 'GET',
@@ -45,37 +46,7 @@ function getAll() {
   };
 
   return fetch('/users', requestOptions).then(handleResponse);
-}*/
-
-/*
-function getById(id) {
-  const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
-  };
-
-  return fetch('/users/' + id, requestOptions).then(handleResponse);
-} 
-
-function update(user) {
-  const requestOptions = {
-    method: 'PUT',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify(user)
-  };
-
-  return fetch('/users/' + user.id, requestOptions).then(handleResponse);
 }
-
-// prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
-  const requestOptions = {
-    method: 'DELETE',
-    headers: authHeader()
-  };
-
-  return fetch('/users/' + id, requestOptions).then(handleResponse);
-}*/
 
 function handleResponse(response) {
   if (!response.ok) {

@@ -1,12 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes  from 'prop-types';
-
 import { history } from './helpers/history';
 import { alertActions } from './LoginPage/actions/alertActions';
-import { PrivateRoute } from './Shared/components/PrivateRoute';
-import { HomePage } from './HomePage/components/HomePage';
-import { LoginPage } from './LoginPage/components/LoginPage';
 import { NavBar } from './Navigation/NavBar';
 import Content from './content';
 
@@ -31,7 +27,7 @@ class App extends React.Component {
     const { children } = this.props;
     const { loggedIn } = this.props;
 
-    let navHeader = loggedIn ? <NavBar /> : '';
+    let navHeader = loggedIn ? <NavBar /> : null;
 
     return (
       <div className="jumbotron">      

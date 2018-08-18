@@ -6,9 +6,8 @@ localStorage.setItem('users', JSON.stringify([{
   'password': '1234',
 }]));
 // array in local storage for registered users
-
 let users = JSON.parse(localStorage.getItem('users')) || [];
-     
+
 export function configureFakeBackend() {
   let realFetch = window.fetch;
   window.fetch = function (url, opts) {
@@ -45,31 +44,11 @@ export function configureFakeBackend() {
             return;
         }
 
-        // get users
+        // get all users
         if (url.endsWith('/users') && opts.method === 'GET') {
             // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
             if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
                 resolve({ ok: true, json: () => users });
-            } else {
-                // return 401 not authorised if token is null or invalid
-                reject('Unauthorised');
-            }
-
-            return;
-        }
-
-        // get user by id
-        if (url.match(/\/users\/\d+$/) && opts.method === 'GET') {
-            // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
-            if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
-                // find user by id in users array
-                let urlParts = url.split('/');
-                let id = parseInt(urlParts[urlParts.length - 1]);
-                let matchedUsers = users.filter(user => { return user.id === id; });
-                let user = matchedUsers.length ? matchedUsers[0] : null;
-
-                // respond 200 OK with user
-                resolve({ ok: true, json: () => user});
             } else {
                 // return 401 not authorised if token is null or invalid
                 reject('Unauthorised');
@@ -100,34 +79,6 @@ export function configureFakeBackend() {
 
             return;
         }
-
-        // delete user
-        if (url.match(/\/users\/\d+$/) && opts.method === 'DELETE') {
-            // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
-            if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
-                // find user by id in users array
-                let urlParts = url.split('/');
-                let id = parseInt(urlParts[urlParts.length - 1]);
-                for (let i = 0; i < users.length; i++) {
-                    let user = users[i];
-                    if (user.id === id) {
-                        // delete user
-                        users.splice(i, 1);
-                        localStorage.setItem('users', JSON.stringify(users));
-                        break;
-                    }
-                }
-
-                // respond 200 OK
-                resolve({ ok: true, json: () => ({}) });
-            } else {
-                // return 401 not authorised if token is null or invalid
-                reject('Unauthorised');
-            }
-
-            return;
-        }
-
         // pass through any requests not handled above
         realFetch(url, opts).then(response => resolve(response));
 
